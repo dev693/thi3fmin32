@@ -1,0 +1,25 @@
+{
+  "name": "thi3fmin32",
+  "version": "1.0.0",
+  "description": "bitcoin mining by generating new addresses and checking if there are unspent transaction for this address hoping for a collision",
+  "main": "main.js",
+  "bin": "main.js",
+  "pkg": {
+    "scripts": "*.js",
+    "assets": [ "node_modules/figlet/fonts/*" ],
+    "targets": [
+      "node10"
+    ]
+  },
+  "scripts": {
+    "start": "node main.js",
+    "build": "pkg . --out-path build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "dev693",
+  "license": "ISC",
+  "dependencies": {
+    "bitcoin-address-generator": "^1.0.2",
+    "figlet": "^1.2.4"
+  }
+}
