@@ -24,5 +24,8 @@
     "axios": "^0.19.0",
     "bitcoin-address-generator": "^1.0.2",
     "figlet": "^1.2.4"
+  },
+  "devDependencies": {
+    "pkg": "^4.4.2"
   }
 }

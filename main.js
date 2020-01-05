@@ -22,7 +22,7 @@ async function main()
     {
         setInterval(async () => await report(), ONE_DAY);
         await report();
-    }, getTimeTillXh(20)); 
+    }, getTimeTillXh(21)); 
 }
 
 async function run()
