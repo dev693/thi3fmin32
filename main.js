@@ -4,6 +4,7 @@ const asciiart = require('figlet');
 const fs = require('fs');
 
 const API = "https://api-r.bitcoinchain.com/v1/address/";
+const SLACK_WEBHOOK = ""
 const ONE_DAY = 86400000;
 
 let count = 0;
@@ -84,7 +85,7 @@ async function postSlack(msg)
     try
     {
         let payload = { "username": "thi3fmin32", "text": msg}
-        await axios.post("https://hooks.slack.com/services/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", payload);     
+        await axios.post(SLACK_WEBHOOK, payload);     
     }
     catch (e)
     {
