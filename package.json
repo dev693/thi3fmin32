@@ -6,7 +6,9 @@
   "bin": "main.js",
   "pkg": {
     "scripts": "*.js",
-    "assets": [ "node_modules/figlet/fonts/*" ],
+    "assets": [
+      "node_modules/figlet/fonts/*"
+    ],
     "targets": [
       "node10"
     ]
@@ -19,6 +21,7 @@
   "author": "dev693",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.0",
     "bitcoin-address-generator": "^1.0.2",
     "figlet": "^1.2.4"
   }
