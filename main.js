@@ -6,6 +6,7 @@ const fs = require('fs');
 const API = "https://api-r.bitcoinchain.com/v1/address/";
 const ONE_DAY = 86400000;
 const SETTING_FILE = "setting.json";
+const MAX_ADDRESS = Math.pow(2, 160);
 
 let count = 0;
 let slackWebhook = ""
@@ -16,15 +17,13 @@ main();
 async function main()
 {
     console.log(asciiart.textSync("thi3fmin32"));
-
     let settings = readSetting();
     slackWebhook = settings.slack;
     dailyCount = settings.daily ? settings.daily : 0;
     totalCount = settings.total ? settings.daily : 0;
 
-    await postSlack("starting \n```" + asciiart.textSync("thi3fmin32") + "```");
+    await postSlack("```+++++++++++++ STARTING +++++++++++++++++\n" + asciiart.textSync("thi3fmin32") + "```");
     setInterval(async () => await run(), 1010);
-
     setTimeout(async () => 
     {
         setInterval(async () => await report(), ONE_DAY);
@@ -123,7 +122,7 @@ async function postSlack(msg)
 async function report()
 {
     totalCount += dailyCount;
-    await postSlack("Checked " + dailyCount + " adresses today, totally " + totalCount + "\n =>" + (totalCount / Math.pow(2, 160)( + "%")));
+    await postSlack("```+++++++++++++ REPORT +++++++++++++++++\nToday: " + dailyCount + "\nTotal: " + totalCount + "\nProgress: " + ((totalCount * 100) / MAX_ADDRESS) + "%```");
     dailyCount = 0;
 }
 
@@ -134,53 +133,7 @@ function getTimeTillXh(x)
     todayX.setHours(x,0,0,0);
     let timespan = todayX - now;
     if (timespan < 0)
-        timespan + ONE_DAY;
+        timespan += ONE_DAY;
 
     return timespan;
 }
-/*
-
-    request.on('error', (err) => 
-    {
-        error("request failed: " + err.message);
-    });
-
-    request.on('response', (res) => 
-    {
-        if (res.statusCode !== 200)
-        {
-            error("requesting balance failed: status " + res.statusCode);
-            return;
-        }
-    
-        res.setEncoding('utf8');
-        let rawData = '';
-        res.on('data', (chunk) => { rawData += chunk; });
-        res.on('end', () => {
-            try 
-            {
-                const results = JSON.parse(rawData);
-                if (results.length != wallets.length)
-                    error("missmatch between results and wallets");
-
-                for (let i = 0; i < wallets.length; i++)
-                {
-                    let wallet = wallets[i];
-                    let balance = results[i].balance ? results[i].balance : 0;
-                    log("address: " + wallet.address + " balance: " + balance);
-                    if (balance > 0)
-                    {
-                        console.log(asciiart.textSync("JACKPOT"));
-                        fs.appendFileSync('jackpot.csv', "" + wallet.key + ";" + wallet.address + ";" + balance);
-                        https.post("https://hooks.slack.com/services/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", 
-                    }
-                }
-            } 
-            catch (e) 
-            {
-            }
-        });
-
-        request.end();
-
-    });*/
