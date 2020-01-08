@@ -4,10 +4,11 @@ const asciiart = require('figlet');
 const fs = require('fs');
 
 const API = "https://api-r.bitcoinchain.com/v1/address/";
-const SLACK_WEBHOOK = ""
 const ONE_DAY = 86400000;
+const SETTING_FILE = "setting.json";
 
 let count = 0;
+let slackWebhook = ""
 let dailyCount = 0;
 let totalCount = 0;
 main();
@@ -15,6 +16,12 @@ main();
 async function main()
 {
     console.log(asciiart.textSync("thi3fmin32"));
+
+    let settings = readSetting();
+    slackWebhook = settings.slack;
+    dailyCount = settings.daily ? settings.daily : 0;
+    totalCount = settings.total ? settings.daily : 0;
+
     await postSlack("starting \n```" + asciiart.textSync("thi3fmin32") + "```");
     setInterval(async () => await run(), 1010);
 
@@ -34,6 +41,7 @@ async function run()
         bitcoin.createWalletAddress((w) => { wallets.push(w) });
     
     await checkBalance(wallets);
+    saveSettings();
 }
 
 async function checkBalance(wallets)
@@ -80,12 +88,31 @@ function error(msg)
     console.error(time + msg);
 }
 
+function readSetting()
+{
+    if (!fs.existsSync(SETTING_FILE))
+        return {};
+    let data = fs.readFileSync(SETTING_FILE);
+    return JSON.parse(data);
+}
+
+function saveSettings()
+{
+    var settings = 
+    {
+        "slack": slackWebhook,
+        "daily": dailyCount,
+        "total": totalCount,
+    };
+    fs.writeFile(SETTING_FILE, JSON.stringify(settings), () => {});
+}
+
 async function postSlack(msg)
 {
     try
     {
         let payload = { "username": "thi3fmin32", "text": msg}
-        await axios.post(SLACK_WEBHOOK, payload);     
+        await axios.post(slackWebhook, payload);     
     }
     catch (e)
     {
